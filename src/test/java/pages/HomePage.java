@@ -36,7 +36,6 @@ public class HomePage extends FirstandFinal{
 				}
 				else if (buttonToClick.equalsIgnoreCase("HolidaysList")) {
 					elements.clickButton( HolidayImage);
-					//System.out.println("xpath for holidayimage"+HolidayImage);
 				}
 				else if (buttonToClick.equalsIgnoreCase("Chart")) {
 					elements.clickButton( ChartImage);
@@ -50,7 +49,7 @@ public class HomePage extends FirstandFinal{
 				else if (buttonToClick.equalsIgnoreCase("Conflict")) {
 					elements.clickButton( ConflictImage);
 				}
-				//Thread.sleep(10000);
+				
 				driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 				return true;
 			 }

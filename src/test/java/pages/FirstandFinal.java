@@ -39,9 +39,10 @@ public class FirstandFinal {
 	public ExtentHtmlReporter htmlreport;
 	public HolidaysListPage HLP;
    public static Logger logs;
-   String[][] publicHoliday;
-   String[][] optionalHoliday;
-   
+ //  String[][] publicHoliday;
+ //  String[][] optionalHoliday;
+   static String [][] publicHoliday=new String[100][100];
+	static String [][] optionalHoliday=new String[100][100];
 	public void setUp() {
 
 			htmlreport=new ExtentHtmlReporter(new File("./Reports/PChtml"+getCurrentDateTime()+".html"));
@@ -51,13 +52,16 @@ public class FirstandFinal {
 		}
 		
 	
-	public void launchBrowser() {
+	public boolean launchBrowser() {
 		try {
 			driver=BrowserUtil.initApplication(driver,CDP.getBrowser(), CDP.getUrl());
+			return true;
 		} catch (InterruptedException e) {
 			
 			e.printStackTrace();
+			return false;
 		}
+		
 	}
 	public void launchBrowser(String browser) {
 		try {
@@ -93,46 +97,35 @@ public class FirstandFinal {
 	}
 	
 	public void sparkReportPass(String methodName) {
-		//ExtentSparkReporter reporter=new ExtentSparkReporter(new File("./Reports/PC"+getCurrentDateTime()+".html"));
-		
+				
 		test=report.createTest(methodName);
 		logs=LogManager.getLogger();
 		String filename=capturescreenshot(driver);
 		System.out.println("captured Screenshot name"+filename);
 		test.log(Status.INFO,"Action Performed"+methodName);
 		test.log(Status.PASS, "The expected Action "+methodName+"is performed Successfully");
-		//log.info(MediaEntityBuilder.createScreenCaptureFromPath(filename).build());
 		test.addScreenCaptureFromPath("./Screenshots/"+filename);
-		//Logger.LIBRARY_NAME_LOG4J.length();
 		logs.info(methodName+"Logger event");
 		report.flush();
 		
 	}
 	public void reportInfo(String methodName) {
-		//ExtentSparkReporter reporter=new ExtentSparkReporter(new File("./Reports/PC"+getCurrentDateTime()+".html"));
 		
 		test=report.createTest(methodName);
 		logs=LogManager.getLogger();
 		String filename=capturescreenshot(driver);
-		//System.out.println("captured Screenshot name"+filename);
 		test.generateLog(Status.INFO,"Action Performed"+methodName);
 		test.log(Status.PASS, "The expected Action "+methodName+"is performed Successfully");
-		//log.info(MediaEntityBuilder.createScreenCaptureFromPath(filename).build());
 		test.addScreenCaptureFromPath("./Screenshots/"+filename);
-		//Logger.LIBRARY_NAME_LOG4J.length();
 		logs.info(methodName+"Logger event");
 		report.flush();
 		
 	}
-	@SuppressWarnings("unchecked")
 	
-
 public void sparkReportFailure(String methodName) {
-	//ExtentSparkReporter reporter=new ExtentSparkReporter(new File("./Reports/PC"+getCurrentDateTime()+".html"));
-	//ExtentReports report=new ExtentReports();
-	 test=report.createTest(methodName);
-	 logs=LogManager.getLogger();
-	//report.attachReporter(htmlreport);
+	test=report.createTest(methodName);
+	logs=LogManager.getLogger();
+	
 	String filename=capturescreenshot(driver);
 	test.log(Status.INFO, "Action Performed"+methodName);
 	test.log(Status.FAIL, "The expected Action "+methodName+"is  not performed");
@@ -143,17 +136,17 @@ public void sparkReportFailure(String methodName) {
 }
 	public void helper() {	
 		test=report.createTest("Public Holiday List");
-		publicHoliday=HolidaysListPage.publicholiday();
+		//System.out.println("Public"+HolidaysListPage.publicholiday());
+		String [][] publicHoliday=HolidaysListPage.publicholiday();
 		System.out.println("Public HolidayList from Helper file"+publicHoliday);
-		//optionalHoliday=HolidaysListPage.optionalholiday();
-		//System.out.println("optional HolidayList from Helper file"+optionalHoliday);
 		Markup m = MarkupHelper.createTable( publicHoliday);
 		test.pass(m);
+		
 		test=report.createTest("Optional Holiday List");
-		//this.publicHoliday=publicHoliday;
-		//this.optionalHoliday=optionalHoliday;
-		//Markup m1 = MarkupHelper.createTable( optionalHoliday);
-		//test.pass(m1);
+		optionalHoliday=HolidaysListPage.optionalholiday();
+		System.out.println("optional HolidayList from Helper file"+optionalHoliday);
+		Markup m1 = MarkupHelper.createTable( optionalHoliday);
+		test.pass(m1);
 	}
 	 
 

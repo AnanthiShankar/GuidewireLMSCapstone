@@ -12,3 +12,5 @@ import io.cucumber.testng.CucumberOptions;
 public class Runner extends AbstractTestNGCucumberTests{
 
 }
+//target plugins like monochrome ,pretty
+//
