@@ -2,6 +2,7 @@ package StepDefinitions;
 
 
 
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import com.aventstack.extentreports.Status;
@@ -13,7 +14,8 @@ import pages.FirstandFinal;
 import pages.HolidaysListPage;
 import pages.HomePage;
 import utility.ExcelDataProvider;
-//import utility.ReportSpark;
+
+
 
 public class HolidayList extends FirstandFinal {
 	
@@ -21,72 +23,84 @@ public class HolidayList extends FirstandFinal {
 	HolidaysListPage HL= new HolidaysListPage(FirstandFinal.driver);
 	ExcelDataProvider EDP=new ExcelDataProvider();
 	
+	@Test(priority=1)
 	@Given("User is on the EY LMS Page")
 	public void user_is_on_the_ey_lms_page() {
 		String methodName="user_is_on_the_ey_lms_page";
-		
+		try {
 		HP.setUp();
 		if (HP.launchBrowser()) {
 			HP.sparkReportPass(methodName);
 		}else {
 			HP.sparkReportFailure(methodName);
 		}
-		
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 			
 	}
-	
+	@Test(priority=2)
 	@When("User Navigates to the Holiday List Page")
 	public void user_navigates_to_the_holiday_list_page() {
 	 
 		String methodName="user_navigates_to_the_holiday_list_page";
-		
 		try {
-	    if (HP.clickButton("HolidaysList")) {
-	    	HL.titleValidation();
-		    HP.sparkReportPass(methodName);
+			HP.clickButton("HolidaysList");
+		
+	    if (HL.titleValidation()) {
+	    	HP.reportInfo(methodName);
+		    
 	    }else {
 	    	HP.sparkReportFailure(methodName);
 		}
-		}catch (Exception e) {
-			e.printStackTrace();
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
 		}
+		
 	}
-
+	@Test(priority=3)
+	@Parameters("9")
 	@Then("Validate the public holiday count is  equal to or greater than “{int}”")
 	public void validate_the_public_holiday_count_is_equal_to_or_greater_than(int int1)  {
+		
 		String methodName="validate_the_public_holiday_count_is_equal_to_or_greater_than";
+		
 		try {
-		HL.holidayvalues(int1);
-		HP.sparkReportPass(methodName);
-		}catch (Exception e) {
-			 HP.sparkReportFailure(methodName);
+			if (HL.validateNoOfHolidays(int1)) {
+				System.out.println(int1);
+				HP.sparkReportPass(methodName);
+				messageCounter(int1);
+			
+			}else {
+				
+				HP.sparkReportFailure(methodName);
+				
+			}
+		} catch (InterruptedException e) {
+			
+			e.printStackTrace();
 		}
+			
+		
 	}
 	
-
+	@Test(priority=4)
 	@Then("User is able to split the holiday details as per Holiday Type and print it as a report")
 	public void user_is_able_to_split_the_holiday_details_as_per_holiday_type_and_print_it_as_a_report() {
 		String methodName="user_is_able_to_split_the_holiday_details_as_per_holiday_type_and_print_it_as_a_report";
 		try {
 			HL.printPublicHolidayList();
 			HL.printOptionalHolidayList();
-		 	HP.sparkReportPass(methodName);
-		 	HP.helper();
+		 	HP.reportInfo(methodName);
+		 	HL.publicholiday();
+		 	HL.optionalholiday();
+		 	//HP.helper(data, methodName);
 		}catch (Exception e) {
-			 HP.sparkReportFailure(methodName);
+			e.printStackTrace();
 		}
 	}
 	
-	@Then("Validation message is printed")
-	public void validation_message_is_printed() {
-		String methodName="validation_message_is_printed";
-		try {
-			System.out.println("End Of LMS Capstone Project");
-	   		HP.sparkReportPass(methodName);
-		}catch (Exception e) {
-			HP.sparkReportFailure(methodName);
-	}
-	}
+	
 
 }
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suite name="Suite">
-  <test name="Test" parallel="methods">
+  <test name="LMS Test" >
     <classes>
       
-      <class name="StepDefinitions.HolidayList.java"/>
+      <class name="StepDefinitions.HolidayList"></class>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->
