@@ -59,7 +59,7 @@ public class HolidayList extends FirstandFinal {
 		
 	}
 	@Test(priority=3)
-	@Parameters("9")
+	@Parameters("count")
 	@Then("Validate the public holiday count is  equal to or greater than “{int}”")
 	public void validate_the_public_holiday_count_is_equal_to_or_greater_than(int int1)  {
 		

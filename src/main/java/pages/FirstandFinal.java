@@ -108,7 +108,7 @@ public class FirstandFinal {
 		test=report.createTest(methodName);
 		logs=LogManager.getLogger();
 		base64code=capturescreenshot();
-		
+		capturescreenshot(driver);
 		test.log(Status.INFO,"Action Performed"+methodName);
 		test.log(Status.PASS, "The expected Action "+methodName+"is performed Successfully");
 		test.addScreenCaptureFromBase64String(base64code,methodName);
@@ -121,7 +121,7 @@ public class FirstandFinal {
 		
 		test=report.createTest(methodName);
 		test.generateLog(Status.INFO,"Action Performed"+methodName);
-		test.log(Status.PASS, "The expected Action "+methodName+"is performed Successfully");
+		test.log(Status.PASS, "The expected Action "+methodName+" is performed Successfully");
 		report.flush();
 		
 	}
@@ -130,8 +130,9 @@ public void sparkReportFailure(String methodName) {
 	String base64code;
 	test=report.createTest(methodName);
 	logs=LogManager.getLogger();
+	capturescreenshot(driver);
 	base64code=capturescreenshot();
-	test.log(Status.FAIL, "The expected Action "+methodName+"is  not performed");
+	test.log(Status.FAIL, "The expected Action "+methodName+" is  not performed");
 	test.addScreenCaptureFromBase64String(base64code,methodName);
 	logs.error(methodName+"Logger event");
 	report.flush();

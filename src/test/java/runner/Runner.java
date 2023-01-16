@@ -6,10 +6,11 @@ import io.cucumber.testng.CucumberOptions;
 
 
 @CucumberOptions(
-	//format={"pretty","json:path/to/json_repot.json"},	
+	
 	features=("src/test/resources/Features"),
 	glue={"StepDefinitions"},
 	plugin = {"pretty", "json:target/json_report.json"},
+	monochrome = true,
 	tags= ("@Regression"))
 	
 public class Runner extends AbstractTestNGCucumberTests{

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suite name="Suite">
   <test name="LMS Test" >
+   <parameter name="count" value="9"/>
     <classes>
       
       <class name="StepDefinitions.HolidayList"></class>

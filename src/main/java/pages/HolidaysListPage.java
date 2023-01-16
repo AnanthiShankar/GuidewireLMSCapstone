@@ -25,8 +25,8 @@ import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.markuputils.Markup;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 
-import overridefunctions.HolidayDetails;
-import overridefunctions.WebElementActions;
+import reusablefunctions.HolidayDetails;
+import reusablefunctions.WebElementActions;
 
 public class HolidaysListPage extends FirstandFinal
 {
