@@ -1,45 +1,47 @@
 package StepDefinitions;
 
+import java.time.Duration;
 
-
+import org.junit.Assert;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
-import com.aventstack.extentreports.Status;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import pages.FirstandFinal;
 import pages.HolidaysListPage;
 import pages.HomePage;
-import utility.ExcelDataProvider;
-
-
+import utility.FirstandFinal;
 
 public class HolidayList extends FirstandFinal {
-	
+	long threadid;
 	HomePage HP= new HomePage(FirstandFinal.driver);
 	HolidaysListPage HL= new HolidaysListPage(FirstandFinal.driver);
-	ExcelDataProvider EDP=new ExcelDataProvider();
-	
-	@Test(priority=1)
+
+		
 	@Given("User is on the EY LMS Page")
 	public void user_is_on_the_ey_lms_page() {
 		String methodName="user_is_on_the_ey_lms_page";
 		try {
 		HP.setUp();
-		if (HP.launchBrowser()) {
-			HP.sparkReportPass(methodName);
-		}else {
-			HP.sparkReportFailure(methodName);
-		}
+		HP.launchBrowsers();
+		HL.WebPageComparatorasPDF(methodName);
+		WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(20));   
+		//wait.until(ExpectedConditions.titleContains("LMS | Leave Management System- Home"));
+		//Assert.assertEquals("test", "test");
+		//if (driver.getTitle().equals("LMS | Leave Management System- Home")) {
+			//HP.reportInfo(methodName);
+		//}else {
+			//HP.sparkReportFailure(methodName);
+		//}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 			
 	}
-	@Test(priority=2)
+	
 	@When("User Navigates to the Holiday List Page")
 	public void user_navigates_to_the_holiday_list_page() {
 	 
@@ -53,13 +55,17 @@ public class HolidayList extends FirstandFinal {
 	    }else {
 	    	HP.sparkReportFailure(methodName);
 		}
-		} catch (InterruptedException e1) {
+		} 
+		catch (InterruptedException e1) {
 			e1.printStackTrace();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 	}
-	@Test(priority=3)
-	@Parameters("count")
+	
+	
 	@Then("Validate the public holiday count is  equal to or greater than “{int}”")
 	public void validate_the_public_holiday_count_is_equal_to_or_greater_than(int int1)  {
 		
@@ -67,7 +73,6 @@ public class HolidayList extends FirstandFinal {
 		
 		try {
 			if (HL.validateNoOfHolidays(int1)) {
-				System.out.println(int1);
 				HP.sparkReportPass(methodName);
 				messageCounter(int1);
 			
@@ -84,7 +89,7 @@ public class HolidayList extends FirstandFinal {
 		
 	}
 	
-	@Test(priority=4)
+	
 	@Then("User is able to split the holiday details as per Holiday Type and print it as a report")
 	public void user_is_able_to_split_the_holiday_details_as_per_holiday_type_and_print_it_as_a_report() {
 		String methodName="user_is_able_to_split_the_holiday_details_as_per_holiday_type_and_print_it_as_a_report";
@@ -94,7 +99,8 @@ public class HolidayList extends FirstandFinal {
 		 	HP.reportInfo(methodName);
 		 	HL.publicholiday();
 		 	HL.optionalholiday();
-		 	//HP.helper(data, methodName);
+		 	HL.WebPageComparatorasPDF(methodName);
+		 	
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
