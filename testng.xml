@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<suite name="Suite">
-  <test name="LMS Test" >
-   <parameter name="count" value="9"/>
-    <classes>
-      
-      <class name="StepDefinitions.HolidayList"></class>
+<suite name="Parallel test suite" parallel="classes" thread-count="2">
+  <test name="LMS Test1" >
+      <classes>
+      <parameter name="browserName" value="chrome"></parameter>    
+       <class name="runner.Runner2"></class>
     </classes>
   </test> <!-- Test -->
+ 
 </suite> <!-- Suite -->
+
