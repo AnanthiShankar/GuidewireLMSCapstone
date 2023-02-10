@@ -1,31 +1,33 @@
-package pages;
+package utility;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Pdf;
+import org.openqa.selenium.PrintsPage;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.io.FileHandler;
-
+import org.openqa.selenium.print.PrintOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.MediaEntityBuilder;
-
-//import io.cucumber.plugin.event.Status;
-import utility.BrowserUtil;
-import utility.ConfigDataProvider;
-import utility.ExcelDataProvider;
-
 import com.aventstack.extentreports.reporter.ExtentReporter;
+
 import org.apache.logging.log4j.Logger;
-//import freemarker.log.Logger;
+
 
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.markuputils.Markup;
@@ -41,35 +43,41 @@ public class FirstandFinal {
 	public ExtentHtmlReporter htmlreport;
 	public  ExcelDataProvider EDP;
 	public static Logger logs;
- 
-	public void setUp() {
+	public long threadid;
+	public int counter;
+	public String browserName;
+	public FirstandFinal() {
+		threadid=this.getThreadId();
+		//return threadid;
+	}
+	public void setUp() throws InterruptedException {
 
 			htmlreport=new ExtentHtmlReporter(new File("./Reports/PChtml"+getCurrentDateTime()+".html"));
 			report=new ExtentReports();
 			report.attachReporter(htmlreport);
-		
+			//browserName=xmlbrowser();
+			if (browserName.isEmpty()) {
+			driver=BrowserUtil.driverManager(CDP.getBrowser());
+			}
+			else {
+				driver=BrowserUtil.driverManager(browserName);
+			}
+			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);			
+			driver.manage().window().maximize();
 		}
 		
 	
-	public boolean launchBrowser() {
-		try {
-			driver=BrowserUtil.initApplication(driver,CDP.getBrowser(), CDP.getUrl());
-			return true;
-		} catch (InterruptedException e) {
+	public void launchBrowsers() {
+		try {			
+			BrowserUtil.launchBrowser(driver, CDP.getUrl());
+		} catch (Exception e) {
 			
 			e.printStackTrace();
-			return false;
+		
 		}
 		
 	}
-	public void launchBrowser(String browser) {
-		try {
-			driver=BrowserUtil.initApplication(driver,browser, CDP.getUrl());
-		} catch (InterruptedException e) {
-			
-			e.printStackTrace();
-		}
-	}
+	
 	
 	public void exitBrowser() {
 		BrowserUtil.exitBrowser(driver);
@@ -147,7 +155,12 @@ public void sparkReportFailure(String methodName) {
 		report.flush();
 			
 	}
-	 
+	 public void WebPageComparatorasPDF(String methodName) throws IOException {
+	
+		 Pdf pdf =((PrintsPage)driver).print(new PrintOptions());
+		Files.write(Paths.get("./PdfFiles/Selenium_"+methodName+"_"+threadid+".pdf"), OutputType.BYTES.convertFromBase64Png(pdf.getContent()));
+
+	 }
 
 public void messageCounter(int count) {
 	ExcelDataProvider EDP=new ExcelDataProvider();
@@ -167,4 +180,8 @@ public void messageCounter(int count) {
 	
 	
 }
+public long getThreadId() {
+	return Thread.currentThread().getId();
+}
+
 }
